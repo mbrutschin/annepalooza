@@ -1,0 +1,303 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnnePalooza 2026 - Official Site</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Caveat:wght@700&family=Fredoka+One&family=Lexend:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #FDF5E6;
+            --primary-color: #FF7F50;
+            --secondary-color: #6A5ACD;
+            --accent-yellow: #FFD700;
+            --text-color: #000;
+            --pink-scrap: #ff4081;
+        }
+
+        body { 
+            font-family: 'Lexend', sans-serif; 
+            background-color: var(--bg-color); 
+            margin: 0; padding: 0; text-align: center; color: var(--text-color);
+            background-image: radial-gradient(#ccc 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .lang-switch {
+            position: fixed; top: 120px; right: 20px; z-index: 2000;
+            background: var(--accent-yellow); color: #000; border: 3px solid #000;
+            padding: 10px 15px; border-radius: 10px; cursor: pointer; font-family: 'Bungee';
+            box-shadow: 5px 5px 0px #000; transform: rotate(5deg);
+        }
+
+        #countdown {
+            background: #000; color: #fff; padding: 15px; font-family: 'Bungee', cursive;
+            display: flex; justify-content: center; gap: 20px; font-size: 1.2rem;
+            border-bottom: 5px solid var(--primary-color);
+        }
+        .time-part span { font-size: 0.7rem; color: var(--primary-color); display: block; }
+
+        header { padding: 60px 20px; border-bottom: 5px solid #000; background: var(--accent-yellow); }
+        .bday-tag { font-family: 'Bungee'; background: #000; color: #fff; display: inline-block; padding: 5px 20px; transform: rotate(-2deg); margin-bottom: 10px; font-size: 1.2rem; }
+        h1 { font-family: 'Bungee', cursive; font-size: 3.5rem; margin: 0; text-shadow: 4px 4px 0px var(--primary-color); -webkit-text-stroke: 2px #000; }
+        
+        .interaction-header {
+            display: flex; justify-content: center; gap: 20px;
+            padding: 30px 20px; background: #fff; border-bottom: 5px solid #000; flex-wrap: wrap;
+        }
+        .action-card {
+            background: #fff; border: 4px solid #000; padding: 15px 25px;
+            cursor: pointer; box-shadow: 8px 8px 0px #000; transition: 0.2s; min-width: 260px;
+        }
+        .action-card:hover { transform: translate(-4px, -4px); box-shadow: 12px 12px 0px var(--secondary-color); }
+        .action-card h2 { font-family: 'Bungee'; margin: 0; font-size: 1.2rem; }
+        .action-card p { font-family: 'Caveat'; font-size: 1.5rem; margin: 5px 0 0 0; color: var(--pink-scrap); font-weight: bold; }
+
+        .schedule-container { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; padding: 40px 20px; max-width: 1200px; margin: 0 auto; 
+        }
+        
+        .day-card { 
+            background: #fff; border: 4px solid #000; padding: 20px; 
+            box-shadow: 10px 10px 0px #000; cursor: pointer; transition: 0.2s;
+            text-align: center; display: flex; flex-direction: column; justify-content: space-between; min-height: 180px;
+        }
+        .day-card:hover { transform: translate(-5px, -5px); box-shadow: 15px 15px 0px var(--secondary-color); }
+        
+        .card-birthday { background-color: var(--accent-yellow) !important; animation: pulse 2s infinite; transform: scale(1.05); z-index: 5; }
+        @keyframes pulse { 0% { box-shadow: 10px 10px 0px #000; } 50% { box-shadow: 15px 15px 0px var(--primary-color); } 100% { box-shadow: 10px 10px 0px #000; } }
+
+        .date-badge { font-family: 'Bungee'; background: var(--primary-color); color: #fff; padding: 5px 12px; border: 3px solid #000; display: inline-block; margin-bottom: 10px; }
+
+        .modal { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); overflow-y: auto; }
+        .modal-content { 
+            background: #fff; margin: 2% auto; padding: 30px; border: 5px solid #000; 
+            width: 90%; max-width: 800px; text-align: left; position: relative;
+            box-shadow: 15px 15px 0px var(--primary-color);
+        }
+        .close { position: absolute; right: 20px; top: 10px; font-size: 35px; cursor: pointer; font-family: 'Bungee'; }
+        
+        .item-stop { border-bottom: 3px dashed #000; padding: 20px 0; }
+        .item-stop:last-child { border: none; }
+        .bar-time { font-family: 'Bungee'; color: var(--secondary-color); font-size: 1rem; display: block; margin-bottom: 5px; }
+        .item-name { font-family: 'Bungee'; color: #000; font-size: 1.2rem; display: block; }
+        .item-desc { font-size: 0.9rem; margin: 5px 0; color: #444; }
+        .item-tip { background: #f0f0f0; padding: 8px; border-left: 5px solid var(--primary-color); font-size: 0.85rem; display: block; font-style: italic; margin-top: 10px; }
+        .map-link { color: #fff; background: #000; padding: 8px 12px; font-weight: bold; font-size: 0.7rem; text-decoration: none; font-family: 'Bungee'; display: inline-block; margin-top: 10px; border: 2px solid #000; }
+        .map-link:hover { background: var(--primary-color); }
+
+        .corkboard { background: #dcb07a; padding: 40px 10px; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; border: 8px solid #5d4037; box-shadow: inset 0 0 50px rgba(0,0,0,0.3); min-height: 450px; }
+        .post-it { width: 170px; min-height: 170px; padding: 15px; font-family: 'Caveat', cursive; font-size: 1.3rem; box-shadow: 5px 5px 7px rgba(0,0,0,0.2); position: relative; transform: rotate(-2deg); transition: 0.3s; display: flex; flex-direction: column; justify-content: space-between; }
+        .post-it:nth-child(even) { background: #ffeb3b; transform: rotate(2deg); }
+        .post-it:nth-child(3n) { background: #ff4081; color: #fff; transform: rotate(-1deg); }
+        .post-it:hover { transform: scale(1.1) rotate(0deg); z-index: 100; }
+        .post-it .author { font-size: 0.85rem; margin-top: 10px; text-align: right; font-weight: bold; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 5px; font-family: 'Lexend', sans-serif; color: #333; }
+
+        footer { background: #000; color: #fff; padding: 40px; font-family: 'Bungee'; }
+    </style>
+</head>
+<body>
+
+<div id="countdown">
+    <div class="time-part"><div id="days">00</div><span data-key="days">Dias</span></div>
+    <div class="time-part"><div id="hours">00</div><span data-key="hours">Horas</span></div>
+    <div class="time-part"><div id="minutes">00</div><span data-key="mins">Min</span></div>
+    <div class="time-part"><div id="seconds">00</div><span data-key="secs">Seg</span></div>
+</div>
+
+<header>
+    <div class="bday-tag" data-key="bday_tag">ANNE FAZ ANIVERSÁRIO! - 2026</div>
+    <h1>ANNEPALOOZA</h1>
+</header>
+
+<section class="interaction-header">
+    <div class="action-card" onclick="openModal('formsModal')" style="background-color: #b2ebf2;">
+        <h2 data-key="scrap_t">📖 SCRAPBOOK</h2>
+        <p data-key="scrap_p">Deixe sua mensagem!</p>
+    </div>
+    <div class="action-card" onclick="openModal('muralModal')" style="background-color: #f3e5f5;">
+        <h2 data-key="mural_t">💝 VER MURAL</h2>
+        <p data-key="mural_p">Recados da galera!</p>
+    </div>
+</section>
+
+<button class="lang-switch" onclick="toggleLanguage()">PT / EN</button>
+
+<main class="schedule-container">
+    <div class="day-card" onclick="openModal('pubcrawl')"><div class="date-badge">02 MAI</div><h3 data-key="d2_t">🍻 PUB CRAWL</h3><p data-key="d2_s">17:00h - O tour pelos bares!</p></div>
+    <div class="day-card" onclick="openModal('coffeecrawl')"><div class="date-badge">03 MAI</div><h3 data-key="d3_t">☕ COFFEE CRAWL</h3><p data-key="d3_s">13:00h - Cafés e ressaca.</p></div>
+    <div class="day-card" onclick="openModal('relax')"><div class="date-badge">04 MAI</div><h3 data-key="d4_t">🧖‍♀️ SAUNA</h3><p data-key="d4_s">Kuuma Noord às 11:30.</p></div>
+    <div class="day-card" style="background-color: #fff9c4;" onclick="openModal('dinner')"><div class="date-badge">05 MAI</div><h3 data-key="d5_t">🍽️ JANTAR ESPECIAL</h3><p data-key="d5_s">Evento Exclusivo Mozão</p></div>
+    <div class="day-card" onclick="openModal('champions')"><div class="date-badge">06 MAI</div><h3 data-key="d6_t">⚽ CHAMPIONS</h3><p data-key="d6_s">O jogo da volta!</p></div>
+    <div class="day-card card-birthday" onclick="openModal('pllek')"><div class="date-badge" style="background:#000;">07 MAI</div><h3 data-key="d7_t">🎂 O GRANDE DIA</h3><p><strong><span data-key="d7_s">17:00h - ANIVERSÁRIO DA ANNE!</span></strong></p></div>
+    <div class="day-card" style="background-color: #f1f8e9;" onclick="openModal('football')"><div class="date-badge">08 MAI</div><h3 data-key="d8_t">⚽ FOOTBALL DAY</h3><p data-key="d8_s">Anne craque na Holanda!</p></div>
+    <div class="day-card" style="background-color: #fce4ec;" onclick="openModal('party90s')"><div class="date-badge">09 MAI</div><h3 data-key="d9_t">🎸 90s PARTY</h3><p data-key="d9_s">Aniversário do Charl</p></div>
+</main>
+
+<!-- MODAIS -->
+<div id="pubcrawl" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('pubcrawl')">&times;</span>
+    <h2 style="font-family: 'Bungee';" data-key="d2_t">🍻 PUB CRAWL</h2>
+    <div class="item-stop"><span class="bar-time">17:00</span><span class="item-name">Boerejongens Centrum</span><p class="item-desc" data-key="p1_d">Cafeteria luxuosa estilo farmácia antiga.</p><span class="item-tip" data-key="p1_tip">✨ Prove os famosos "Red Velvet Spacetries".</span><a href="https://www.google.com/maps/search/?api=1&query=Boerejongens+Centrum+Amsterdam" target="_blank" class="map-link">📍 MAPA</a></div>
+    <div class="item-stop"><span class="bar-time">18:00</span><span class="item-name">Tales & Spirits</span><p class="item-desc" data-key="p2_d">Drinks premiados e atmosfera incrível.</p><span class="item-tip" data-key="p2_tip">🍸 Experimente o cocktail "Pear Necessities".</span><a href="https://www.google.com/maps/search/?api=1&query=Tales+%26+Spirits+Amsterdam" target="_blank" class="map-link">📍 MAPA</a></div>
+    <div class="item-stop"><span class="bar-time">19:30</span><span class="item-name">Beer Temple</span><p class="item-desc" data-key="p3_d">Cervejas artesanais e IPAs raras.</p><span class="item-tip" data-key="p3_tip">🍺 IPAs frescas do tap e chicken strips.</span><a href="https://www.google.com/maps/search/?api=1&query=Beer+Temple+Amsterdam" target="_blank" class="map-link">📍 MAPA</a></div>
+    <div class="item-stop"><span class="bar-time">20:45</span><span class="item-name">Proeflokaal Arendsnest</span><p class="item-desc" data-key="p4_d">Só servem cervejas de origem holandesa.</p><span class="item-tip" data-key="p4_tip">🇳🇱 O clássico "Kopstootje" (Cerveja + Jenever).</span><a href="https://www.google.com/maps/search/?api=1&query=Proeflokaal+Arendsnest+Amsterdam" target="_blank" class="map-link">📍 MAPA</a></div>
+    <div class="item-stop"><span class="bar-time">21:30</span><span class="item-name">Belushi’s Amsterdam</span><p class="item-desc" data-key="p5_d">Festa, música e Happy Hour longo.</p><span class="item-tip" data-key="p5_tip">🍔 Jägermeister shots e o Belushi's Burger.</span><a href="https://www.google.com/maps/search/?api=1&query=Belushi's+Amsterdam" target="_blank" class="map-link">📍 MAPA</a></div>
+    <div class="item-stop"><span class="bar-time">23:30</span><span class="item-name">Duke of Tokyo</span><p class="item-desc" data-key="p6_d">Karaokê e neon estilo Japão.</p><span class="item-tip" data-key="p6_tip">🎤 Sake Ginjō e Takoyaki para cantar muito.</span><a href="https://www.google.com/maps/search/?api=1&query=Duke+of+Tokyo+Amsterdam" target="_blank" class="map-link">📍 MAPA</a></div>
+</div></div>
+
+<div id="coffeecrawl" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('coffeecrawl')">&times;</span>
+    <h2 style="font-family: 'Bungee';" data-key="d3_t">☕ COFFEE CRAWL</h2>
+    <div class="item-stop"><span class="bar-time">13:00</span><span class="item-name">Sango Specialty Coffee</span><p class="item-desc" data-key="c1_d">Cafés de origem única e precisão técnica.</p><span class="item-tip" data-key="c1_tip">☕ Espresso de grãos etíopes ou V60.</span><a href="https://www.google.com/maps/search/?api=1&query=Sango+Specialty+Coffee+Amsterdam" target="_blank" class="map-link">📍 MAPA</a></div>
+    <div class="item-stop"><span class="item-name">White Label Coffee</span><p class="item-desc" data-key="c2_d">Torrefação minimalista e moderna.</p><span class="item-tip" data-key="c2_tip">🌿 Café filtrado no Aeropress.</span><a href="https://www.google.com/maps/search/?api=1&query=White+Label+Coffee+Amsterdam" target="_blank" class="map-link">📍 MAPA</a></div>
+    <div class="item-stop"><span class="item-name">Rum Baba Coffee</span><p class="item-desc" data-key="c3_d">Ambiente acolhedor com padaria própria.</p><span class="item-tip" data-key="c3_tip">🍰 Flat White com o bolo "Marble Cake".</span><a href="https://www.google.com/maps/search/?api=1&query=Rum+Baba+Coffee+Roasters+Amsterdam" target="_blank" class="map-link">📍 MAPA</a></div>
+    <div class="item-stop"><span class="item-name">Scandinavian Embassy</span><p class="item-desc" data-key="c4_d">Referência em torra clara e estética nórdica.</p><span class="item-tip" data-key="c4_tip">🇳🇴 Café coado e os famosos Cinnamon Buns.</span><a href="https://www.google.com/maps/search/?api=1&query=Scandinavian+Embassy+Amsterdam" target="_blank" class="map-link">📍 MAPA</a></div>
+</div></div>
+
+<div id="champions" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('champions')">&times;</span>
+    <h2 style="font-family: 'Bungee';" data-key="d6_t">⚽ CHAMPIONS & CAKE</h2>
+    <div class="item-stop"><span class="bar-time">21:00</span><span class="item-name">Bayern München vs. PSG</span>
+    <p class="item-desc" data-key="p6_d">O jogo da volta! O clima está fervendo para este embate épico no sofá. É tudo ou nada para o Bayern tentar reverter o placar!</p>
+    <span class="item-tip" data-key="p6_tip">📺 Assistir do sofá com cervejinhas e snacks!</span>
+    <a href="https://www.google.com/search?q=champions+league+scores" target="_blank" class="map-link">🔗 VER PLACAR</a></div>
+</div></div>
+
+<div id="party90s" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('party90s')">&times;</span>
+    <h2 style="font-family: 'Bungee';" data-key="d9_t">🎸 CHARL BIRTHDAY</h2>
+    <div class="item-stop"><span class="item-name">90s Retro Party - Exclusivo</span>
+    <p class="item-desc" data-key="p9_d">Aniversário do Charl em grande estilo: Anos 90 total! Exclusivo para convidados.</p>
+    <span class="item-tip">👟 OUTFIT TIPS: Grunge (camisa xadrez), Neon, Jeans total, bucket hats ou referências a Friends e Um Maluco no Pedaço.</span></div>
+</div></div>
+
+<div id="relax" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('relax')">&times;</span><h2 data-key="d4_t">🧖‍♀️ SAUNA & RELAX</h2><div class="item-stop"><span class="bar-time">11:30</span><span class="item-name">Kuuma Amsterdam Noord</span><p class="item-desc" data-key="spa_d">Sauna a lenha autêntica na beira d'água no Norte de Amsterdam.</p><a href="https://kuuma.nl/" target="_blank" class="map-link">📍 RESERVAR</a></div></div></div>
+<div id="dinner" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('dinner')">&times;</span><h2 data-key="d5_t">🍽️ JANTAR ESPECIAL</h2><p class="item-desc">EVENTO EXCLUSIVO PARA O MOZÃO</p></div></div>
+<div id="pllek" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('pllek')">&times;</span><h2 data-key="d7_t">🎂 O GRANDE DIA</h2><div class="item-stop"><span class="bar-time">17:00</span><span class="item-name">Pllek Amsterdam</span><p class="item-desc" data-key="p7_pllek_d">Comemoração oficial em Amsterdam Noord.</p><a href="https://www.google.com/maps/search/?api=1&query=Pllek+Amsterdam" target="_blank" class="map-link">📍 MAPA</a></div></div></div>
+<div id="football" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('football')">&times;</span><h2 data-key="d8_t">⚽ ANNE ON THE FIELD</h2><p class="item-desc" data-key="p8_d">O dia da maior craque do Brasil jogar em solo holandês.</p></div></div>
+
+<div id="formsModal" class="modal"><div class="modal-content" style="height: 90vh;"><span class="close" onclick="closeModal('formsModal')">&times;</span>
+    <h2 style="font-family: 'Bungee'; text-align: center;">📖 SCRAPBOOK</h2>
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeYmiG9C6nf8uW_55utxwRKta2pXOwbtkOcxlJFR_-ulb9TrA/viewform?embedded=true" width="100%" height="85%" frameborder="0">Carregando…</iframe>
+</div></div>
+
+<div id="muralModal" class="modal"><div class="modal-content" style="height: 90vh;"><span class="close" onclick="closeModal('muralModal')">&times;</span>
+    <h2 style="font-family: 'Bungee'; text-align: center; color: var(--secondary-color);" data-key="mural_t">💝 MURAL DE CARINHO</h2>
+    <div id="corkboard" class="corkboard"><p id="status">Carregando recadinhos...</p></div>
+</div></div>
+
+<footer><p data-key="footer_text">ANNEPALOOZA 2026 • CELEBRANDO A ANNE</p></footer>
+
+<script>
+    const translations = {
+        pt: {
+            bday_tag: "ANNE FAZ ANIVERSÁRIO! - 2026", days: "Dias", mins: "Min", secs: "Seg", hours: "Horas",
+            scrap_t: "📖 SCRAPBOOK", scrap_p: "Deixe sua mensagem!", mural_t: "💝 VER MURAL", mural_p: "Recados da galera!",
+            footer_text: "ANNEPALOOZA 2026 • CELEBRANDO A ANNE",
+            d2_t: "🍻 PUB CRAWL", d2_s: "17:00h - O tour pelos bares!",
+            d3_t: "☕ COFFEE CRAWL", d3_s: "13:00h - Cafés e ressaca.",
+            d4_t: "🧖‍♀️ SAUNA & RELAX", d4_s: "Kuuma Noord às 11:30.",
+            d5_t: "🍽️ JANTAR ESPECIAL", d5_s: "Evento Exclusivo Mozão",
+            d6_t: "⚽ CHAMPIONS", d6_s: "O jogo da volta!",
+            d7_t: "🎂 O GRANDE DIA", d7_s: "17:00h - ANIVERSÁRIO DA ANNE!",
+            d8_t: "⚽ FOOTBALL DAY", d8_s: "Anne craque na Holanda!",
+            d9_t: "🎸 90s PARTY", d9_s: "Aniversário do Charl",
+            p1_d: "Cafeteria luxuosa estilo farmácia antiga.", p1_tip: "✨ Prove os famosos 'Red Velvet Spacetries'.",
+            p2_d: "Drinks premiados e atmosfera incrível.", p2_tip: "🍸 Experimente o cocktail 'Pear Necessities'.",
+            p3_d: "Cervejas artesanais e IPAs raras.", p3_tip: "🍺 IPAs frescas do tap e chicken strips.",
+            p4_d: "Só servem cervejas de origem holandesa.", p4_tip: "🇳🇱 O clássico 'Kopstootje' (Cerveja + Jenever).",
+            p5_d: "Festa, música e Happy Hour longo.", p5_tip: "🍔 Jägermeister shots e o Belushi's Burger.",
+            p6_d: "Karaokê e neon estilo Japão.", p6_tip: "🎤 Sake Ginjō e Takoyaki para cantar muito.",
+            c1_d: "Precisão técnica e grãos únicos.", c1_tip: "☕ Espresso de grãos etíopes ou V60.",
+            c2_d: "Torrefação minimalista moderna.", c2_tip: "🌿 Café filtrado no Aeropress.",
+            c3_d: "Ambiente acolhedor com padaria própria.", c3_tip: "🍰 Flat White com o bolo 'Marble Cake'.",
+            c4_d: "Referência em torra clara e estética nórdica.", c4_tip: "🇳🇴 Café coado e os famosos Cinnamon Buns.",
+            spa_d: "Sauna a lenha autêntica na beira d'água no Norte de Amsterdam.",
+            p5_dinner_d: "EVENTO EXCLUSIVO PARA O MOZÃO", p6_d: "O jogo da volta! O clima está fervendo para este embate épico no sofá. É tudo ou nada para o Bayern tentar reverter o placar!",
+            p6_tip: "📺 Assistir do sofá com cervejinhas e snacks!",
+            p7_pllek_d: "Comemoração oficial em Amsterdam Noord.",
+            p8_d: "O dia da maior craque do Brasil jogar em solo holandês.",
+            p9_d: "Aniversário do Charl em grande estilo: Anos 90 total! Exclusivo para convidados."
+        },
+        en: {
+            bday_tag: "IT'S ANNE'S BIRTHDAY! - 2026", days: "Days", mins: "Mins", secs: "Secs", hours: "Hours",
+            scrap_t: "📖 SCRAPBOOK", scrap_p: "Leave a message!", mural_t: "💝 MESSAGE WALL", mural_p: "Check the love!",
+            footer_text: "ANNEPALOOZA 2026 • CELEBRATING ANNE",
+            d2_t: "🍻 PUB CRAWL", d2_s: "5:00 PM - Bar Tour",
+            d3_t: "☕ COFFEE CRAWL", d3_s: "1:00 PM - Coffee & Hangover",
+            d4_t: "🧖‍♀️ SAUNA & RELAX", d4_s: "Kuuma Noord at 11:30.",
+            d5_t: "🍽️ SPECIAL DINNER", d5_s: "Exclusive Couple Event",
+            d6_t: "⚽ CHAMPIONS", d6_s: "The second leg!",
+            d7_t: "🎂 THE BIG DAY", d7_s: "5:00 PM - ANNE'S BIRTHDAY!",
+            d8_t: "⚽ FOOTBALL DAY", d8_s: "Brazil's greatest star in the NL!",
+            d9_t: "🎸 90s PARTY", d9_s: "Charl's Birthday",
+            p1_d: "Luxurious pharmacy-style coffee shop.", p1_tip: "✨ Try the famous 'Red Velvet Spacetries'.",
+            p2_d: "Award-winning drinks and vibe.", p2_tip: "🍸 Try the 'Pear Necessities' cocktail.",
+            p3_d: "American craft beers and rare IPAs.", p3_tip: "🍺 Fresh IPAs on tap and chicken strips.",
+            p4_d: "Only Dutch-origin beers served.", p4_tip: "🇳🇱 The classic 'Kopstootje' (Beer + Jenever shot).",
+            p5_d: "Long Happy Hour and party.", p5_tip: "🍔 Jägermeister shots and the Belushi's Burger.",
+            p6_d: "Japanese style karaoke and neon.", p6_tip: "🎤 Ginjō Sake and Takoyaki to sing along.",
+            c1_d: "Technical precision and unique beans.", c1_tip: "☕ Ethiopian beans espresso or V60.",
+            c2_d: "Minimalist and modern roastery.", c2_tip: "🌿 Aeropress filtered coffee.",
+            c3_d: "Cozy vibe with on-site bakery.", c3_tip: "🍰 Flat White with the 'Marble Cake'.",
+            c4_d: "Nordic reference in Amsterdam.", c4_tip: "🇳🇴 Hand-brewed coffee and Cinnamon Buns.",
+            spa_d: "Authentic wood-fired sauna by the water.",
+            p5_dinner_d: "EXCLUSIVE COUPLE EVENT", p6_d: "The second leg! The atmosphere is heating up for this epic couch clash. It's all or nothing for Bayern to overturn the score!",
+            p6_tip: "📺 Watch from the couch with beers and snacks!",
+            p7_pllek_d: "Official celebration at Amsterdam North.",
+            p8_d: "The day Brazil's greatest star takes the field in the Netherlands.",
+            p9_d: "Charl's Birthday in style: Full 90s vibes! Exclusive for guests."
+        }
+    };
+
+    const tsvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS_v5sMYvTTJqnVvl-75S10cv4qIBGew0j6yY8iDWpM3W8wJRAMy4MQ1UVcB_mk5QMJAgq8xkk4q_X3/pub?gid=758559175&single=true&output=tsv";
+    const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(tsvUrl);
+
+    async function loadMural() {
+        const board = document.getElementById('corkboard');
+        try {
+            const response = await fetch(proxyUrl + "&t=" + new Date().getTime());
+            const data = await response.text();
+            board.innerHTML = ''; 
+            const lines = data.split(/\r?\n/).filter(line => line.trim() !== "");
+            lines.slice(1).forEach(line => {
+                const cols = line.split('\t');
+                if (cols.length >= 3) {
+                    const nome = cols[1].trim();
+                    const msg = cols[2].trim();
+                    if (msg) {
+                        const postIt = document.createElement('div');
+                        postIt.className = 'post-it';
+                        postIt.innerHTML = `<div>"${msg}"</div><div class="author">— ${nome}</div>`;
+                        board.appendChild(postIt);
+                    }
+                }
+            });
+            if(board.innerHTML === '') board.innerHTML = '<p>Nenhum recado ainda!</p>';
+        } catch (e) { board.innerHTML = "<p>Erro ao carregar o mural.</p>"; }
+    }
+
+    let currentLang = 'pt';
+    function toggleLanguage() {
+        currentLang = currentLang === 'pt' ? 'en' : 'pt';
+        document.querySelectorAll('[data-key]').forEach(el => { el.innerHTML = translations[currentLang][el.getAttribute('data-key')]; });
+    }
+
+    const eventDate = new Date("May 7, 2026 00:00:00").getTime();
+    setInterval(() => {
+        const diff = eventDate - new Date().getTime();
+        if (diff < 0) return;
+        document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+        document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        document.getElementById("minutes").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById("seconds").innerText = Math.floor((diff % (1000 * 60)) / 1000);
+    }, 1000);
+
+    function openModal(id) { 
+        document.getElementById(id).style.display = "block"; 
+        document.body.style.overflow = "hidden"; 
+        if(id === 'muralModal') loadMural();
+    }
+    function closeModal(id) { document.getElementById(id).style.display = "none"; document.body.style.overflow = "auto"; }
+</script>
+</body>
+</html>
